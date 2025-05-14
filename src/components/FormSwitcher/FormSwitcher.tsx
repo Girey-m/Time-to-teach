@@ -28,7 +28,17 @@ export function FormSwitcher() {
             },
           }}
         />
-        <Tab label="Регистрация" />
+        <Tab
+          label="Регистрация"
+          sx={{
+            "&.Mui-selected": {
+              outline: "none",
+            },
+            "&.Mui-focusVisible": {
+              outline: "none",
+            },
+          }}
+        />
       </Tabs>
       <Box sx={{ marginTop: 2 }}>
         {value === 0 && <LoginForm />}
