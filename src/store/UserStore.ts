@@ -13,21 +13,46 @@ interface UserLoginData {
   password: FormDataEntryValue | null;
 }
 
-class FormStore {
+interface UserLocalStorage {
+  signUp: UserSignUpData | null;
+  login: UserLoginData | null;
+}
+
+class UserStore {
   userSignUpData: UserSignUpData = {
-    firstName: null,
-    lastName: null,
-    schoolName: null,
-    email: null,
-    password: null,
+    firstName: "",
+    lastName: "",
+    schoolName: "",
+    email: "",
+    password: "",
   };
 
   userLoginData: UserLoginData = {
-    email: null,
-    password: null,
+    email: "",
+    password: "",
+  };
+
+  userLocalStorage: UserLocalStorage = {
+    signUp: null,
+    login: null,
   };
 
   constructor() {
+    const localData = localStorage.getItem("userLocalStorage")
+      ? JSON.parse(localStorage.getItem("userLocalStorage")!)
+      : false;
+    if (!localData) {
+      this.userLocalStorage = {
+        signUp: this.userSignUpData,
+        login: this.userLoginData,
+      };
+      localStorage.setItem(
+        "userLocalStorage",
+        JSON.stringify(this.userLocalStorage)
+      );
+    } else {
+      this.userLocalStorage = localData;
+    }
     makeAutoObservable(this);
   }
 
@@ -43,6 +68,11 @@ class FormStore {
     };
     if (data) {
       this.userSignUpData = data;
+      this.userLocalStorage.signUp = this.userSignUpData;
+      localStorage.setItem(
+        "userLocalStorage",
+        JSON.stringify(this.userLocalStorage)
+      );
       try {
         const response = await fetch(
           "https://jsonplaceholder.typicode.com/posts",
@@ -56,7 +86,6 @@ class FormStore {
         );
 
         const result = await response.json();
-        console.log(result.response.json());
         console.log("Ответ от сервера:", result);
       } catch (error) {
         if (error instanceof Error) {
@@ -77,6 +106,11 @@ class FormStore {
     };
     if (data) {
       this.userLoginData = data;
+      this.userLocalStorage.login = this.userLoginData;
+      localStorage.setItem(
+        "userLocalStorage",
+        JSON.stringify(this.userLocalStorage)
+      );
 
       try {
         const response = await fetch(
@@ -91,7 +125,6 @@ class FormStore {
         );
 
         const result = await response.json();
-        console.log(result.response.json());
         console.log("Ответ от сервера:", result);
       } catch (error) {
         if (error instanceof Error) {
@@ -102,6 +135,14 @@ class FormStore {
       }
     }
   }
+
+  getUserLocalStorage(): UserLocalStorage | null {
+    const storedData = localStorage.getItem("userLocalStorage");
+    if (storedData) {
+      return JSON.parse(storedData) as UserLocalStorage;
+    }
+    return null;
+  }
 }
 
-export const formStore = new FormStore();
+export const userStore = new UserStore();
