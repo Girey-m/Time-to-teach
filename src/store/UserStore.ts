@@ -13,11 +13,6 @@ interface UserLoginData {
   password: FormDataEntryValue | null;
 }
 
-interface UserLocalStorage {
-  signUp: UserSignUpData | null;
-  login: UserLoginData | null;
-}
-
 class UserStore {
   userSignUpData: UserSignUpData = {
     firstName: "",
@@ -27,32 +22,29 @@ class UserStore {
     password: "",
   };
 
+  signUpFirstName: string = "";
+  signUpLastName: string = "";
+  signUpSchoolName: string = "";
+  signUpEmail: string = "";
+  signUpPassword: string = "";
+
   userLoginData: UserLoginData = {
     email: "",
     password: "",
   };
-
-  userLocalStorage: UserLocalStorage = {
-    signUp: null,
-    login: null,
-  };
+  loginPassword: string = "";
+  loginEmail: string = "";
 
   constructor() {
-    const localData = localStorage.getItem("userLocalStorage")
-      ? JSON.parse(localStorage.getItem("userLocalStorage")!)
-      : false;
-    if (!localData) {
-      this.userLocalStorage = {
-        signUp: this.userSignUpData,
-        login: this.userLoginData,
-      };
-      localStorage.setItem(
-        "userLocalStorage",
-        JSON.stringify(this.userLocalStorage)
-      );
-    } else {
-      this.userLocalStorage = localData;
-    }
+    this.loginEmail = localStorage.getItem("login-email") ?? "";
+    this.loginPassword = localStorage.getItem("login-password") ?? "";
+
+    this.signUpFirstName = localStorage.getItem("sign-up-first-name") ?? "";
+    this.signUpLastName = localStorage.getItem("sign-up-last-name") ?? "";
+    this.signUpSchoolName = localStorage.getItem("sign-up-school-name") ?? "";
+    this.signUpEmail = localStorage.getItem("sign-up-email") ?? "";
+    this.signUpPassword = localStorage.getItem("sign-up-password") ?? "";
+
     makeAutoObservable(this);
   }
 
@@ -68,11 +60,6 @@ class UserStore {
     };
     if (data) {
       this.userSignUpData = data;
-      this.userLocalStorage.signUp = this.userSignUpData;
-      localStorage.setItem(
-        "userLocalStorage",
-        JSON.stringify(this.userLocalStorage)
-      );
       try {
         const response = await fetch(
           "https://jsonplaceholder.typicode.com/posts",
@@ -106,11 +93,6 @@ class UserStore {
     };
     if (data) {
       this.userLoginData = data;
-      this.userLocalStorage.login = this.userLoginData;
-      localStorage.setItem(
-        "userLocalStorage",
-        JSON.stringify(this.userLocalStorage)
-      );
 
       try {
         const response = await fetch(
@@ -136,12 +118,39 @@ class UserStore {
     }
   }
 
-  getUserLocalStorage(): UserLocalStorage | null {
-    const storedData = localStorage.getItem("userLocalStorage");
-    if (storedData) {
-      return JSON.parse(storedData) as UserLocalStorage;
-    }
-    return null;
+  setLoginPassword(password: string) {
+    this.loginPassword = password;
+    localStorage.setItem("login-password", password);
+  }
+
+  setLoginEmail(email: string) {
+    this.loginEmail = email;
+    localStorage.setItem("login-email", email);
+  }
+
+  setSignUpFirstName(firstName: string) {
+    this.signUpFirstName = firstName;
+    localStorage.setItem("sign-up-first-name", firstName);
+  }
+
+  setSignUpLastName(lastName: string) {
+    this.signUpLastName = lastName;
+    localStorage.setItem("sign-up-last-name", lastName);
+  }
+
+  setSignUpSchoolName(schoolName: string) {
+    this.signUpSchoolName = schoolName;
+    localStorage.setItem("sign-up-school-name", schoolName);
+  }
+
+  setSignUpEmail(email: string) {
+    this.signUpEmail = email;
+    localStorage.setItem("sign-up-email", email);
+  }
+
+  setSignUpPassword(password: string) {
+    this.signUpPassword = password;
+    localStorage.setItem("sign-up-password", password);
   }
 }
 
