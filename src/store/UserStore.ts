@@ -19,6 +19,9 @@ class UserStore {
   signUpEmail: string = "";
   signUpPassword: string = "";
 
+	/**
+	 * Этот объект не используется
+	 */
   userLoginData: UserLoginDataI = {
     email: "",
     password: "",

@@ -2,6 +2,9 @@ import type { UserSignUpDataI } from "../interfaces/UserSignUpDataI";
 import type { UserLoginDataI } from "../interfaces/UserLoginDataI";
 
 export async function sendLoginData(data: UserLoginDataI) {
+	/**
+	 * Так как параметр обязательный можно не проверять есть ли он ибо он всегда будет
+	 */
   if (data) {
     try {
       const response = await fetch("http://localhost:3333/api/auth/login", {
@@ -25,6 +28,9 @@ export async function sendLoginData(data: UserLoginDataI) {
 }
 
 export async function sendUserSignUpData(data: UserSignUpDataI) {
+		/**
+	 * Так как параметр обязательный можно не проверять есть ли он ибо он всегда будет
+	 */
   if (data) {
     console.log("Это то что мы отправляем", data);
     try {
