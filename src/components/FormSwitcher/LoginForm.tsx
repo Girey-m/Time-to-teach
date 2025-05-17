@@ -1,5 +1,5 @@
 import { Box, TextField, Button } from "@mui/material";
-import { formStore } from "../../store/FormStore";
+import { userStore } from "../../store/UserStore";
 import { observer } from "mobx-react-lite";
 
 export const LoginForm = observer(() => {
@@ -7,11 +7,28 @@ export const LoginForm = observer(() => {
     <Box
       key={"LoginForm"}
       component="form"
-      onSubmit={(e) => formStore.userLogin(e)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        userStore.sendUserLogin();
+      }}
       sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 300 }}
     >
-      <TextField name="email" label="Email" type="email" required />
-      <TextField name="password" label="Пароль" type="password" required />
+      <TextField
+        name="email"
+        label="Email"
+        type="email"
+        value={userStore.loginEmail}
+        onChange={(e) => userStore.setLoginEmail(e.target.value)}
+        required
+      ></TextField>
+      <TextField
+        name="password"
+        label="Пароль"
+        type="password"
+        value={userStore.loginPassword}
+        onChange={(e) => userStore.setLoginPassword(e.target.value)}
+        required
+      />
       <Button type="submit" variant="contained">
         Войти
       </Button>
