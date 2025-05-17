@@ -1,28 +1,14 @@
 import { makeAutoObservable } from "mobx";
-import type { UserSignUpDataI } from "../interfaces/UserSignUpDataI";
-import type { UserLoginDataI } from "../interfaces/UserLoginDataI";
 
 import { sendLoginData, sendUserSignUpData } from "../api/auth";
 
 class UserStore {
-  userSignUpData: UserSignUpDataI = {
-    firstName: "",
-    secondName: "",
-    autoSchoolName: "",
-    email: "",
-    password: "",
-  };
-
   signUpFirstName: string = "";
   signUpsecondName: string = "";
   signUpautoSchoolName: string = "";
   signUpEmail: string = "";
   signUpPassword: string = "";
 
-  userLoginData: UserLoginDataI = {
-    email: "",
-    password: "",
-  };
   loginPassword: string = "";
   loginEmail: string = "";
 

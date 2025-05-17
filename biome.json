@@ -1,0 +1,8 @@
+{
+  "linter": {
+    "enable": false
+  },
+  "formatter": {
+    "enabled": false
+  }
+}
