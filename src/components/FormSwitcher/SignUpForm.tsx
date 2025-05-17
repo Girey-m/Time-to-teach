@@ -7,7 +7,10 @@ export const SignUpForm = observer(() => {
     <Box
       key={"SignUpForm"}
       component="form"
-      onSubmit={(e) => userStore.userSignUp(e)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        userStore.sendUserSignUp();
+      }}
       sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 300 }}
     >
       <TextField
@@ -19,19 +22,19 @@ export const SignUpForm = observer(() => {
         required
       />
       <TextField
-        name="lastName"
+        name="secondName"
         label="Фамилия"
         type="text"
-        value={userStore.signUpLastName}
-        onChange={(e) => userStore.setSignUpLastName(e.target.value)}
+        value={userStore.signUpsecondName}
+        onChange={(e) => userStore.setSignUpsecondName(e.target.value)}
         required
       />
       <TextField
-        name="schoolName"
+        name="autoSchoolName"
         label="Название Автошколы"
         type="text"
-        value={userStore.signUpSchoolName}
-        onChange={(e) => userStore.setSignUpSchoolName(e.target.value)}
+        value={userStore.signUpautoSchoolName}
+        onChange={(e) => userStore.setSignUpautoSchoolName(e.target.value)}
         required
       />
       <TextField

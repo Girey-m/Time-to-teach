@@ -7,7 +7,10 @@ export const LoginForm = observer(() => {
     <Box
       key={"LoginForm"}
       component="form"
-      onSubmit={(e) => userStore.userLogin(e)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        userStore.sendUserLogin();
+      }}
       sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 300 }}
     >
       <TextField

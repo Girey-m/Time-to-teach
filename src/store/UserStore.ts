@@ -1,34 +1,25 @@
 import { makeAutoObservable } from "mobx";
+import type { UserSignUpDataI } from "../interfaces/UserSignUpDataI";
+import type { UserLoginDataI } from "../interfaces/UserLoginDataI";
 
-interface UserSignUpData {
-  firstName: FormDataEntryValue | null;
-  lastName: FormDataEntryValue | null;
-  schoolName: FormDataEntryValue | null;
-  email: FormDataEntryValue | null;
-  password: FormDataEntryValue | null;
-}
-
-interface UserLoginData {
-  email: FormDataEntryValue | null;
-  password: FormDataEntryValue | null;
-}
+import { sendLoginData, sendUserSignUpData } from "../api/auth";
 
 class UserStore {
-  userSignUpData: UserSignUpData = {
+  userSignUpData: UserSignUpDataI = {
     firstName: "",
-    lastName: "",
-    schoolName: "",
+    secondName: "",
+    autoSchoolName: "",
     email: "",
     password: "",
   };
 
   signUpFirstName: string = "";
-  signUpLastName: string = "";
-  signUpSchoolName: string = "";
+  signUpsecondName: string = "";
+  signUpautoSchoolName: string = "";
   signUpEmail: string = "";
   signUpPassword: string = "";
 
-  userLoginData: UserLoginData = {
+  userLoginData: UserLoginDataI = {
     email: "",
     password: "",
   };
@@ -40,82 +31,33 @@ class UserStore {
     this.loginPassword = localStorage.getItem("login-password") ?? "";
 
     this.signUpFirstName = localStorage.getItem("sign-up-first-name") ?? "";
-    this.signUpLastName = localStorage.getItem("sign-up-last-name") ?? "";
-    this.signUpSchoolName = localStorage.getItem("sign-up-school-name") ?? "";
+    this.signUpsecondName = localStorage.getItem("sign-up-last-name") ?? "";
+    this.signUpautoSchoolName =
+      localStorage.getItem("sign-up-school-name") ?? "";
     this.signUpEmail = localStorage.getItem("sign-up-email") ?? "";
     this.signUpPassword = localStorage.getItem("sign-up-password") ?? "";
 
     makeAutoObservable(this);
   }
 
-  async userSignUp(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  async sendUserSignUp() {
     const data = {
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
-      schoolName: formData.get("schoolName"),
-      email: formData.get("email"),
-      password: formData.get("password"),
+      firstName: this.signUpFirstName,
+      secondName: this.signUpsecondName,
+      autoSchoolName: this.signUpautoSchoolName,
+      email: this.signUpEmail,
+      password: this.signUpPassword,
     };
-    if (data) {
-      this.userSignUpData = data;
-      try {
-        const response = await fetch(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.userSignUpData),
-          }
-        );
 
-        const result = await response.json();
-        console.log("Ответ от сервера:", result);
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error("Ошибка при отправке:", error);
-        } else {
-          console.log("Какаято другая ошибка:", error);
-        }
-      }
-    }
+    sendUserSignUpData(data);
   }
 
-  async userLogin(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  async sendUserLogin() {
     const data = {
-      email: formData.get("email"),
-      password: formData.get("password"),
+      email: this.loginEmail,
+      password: this.loginPassword,
     };
-    if (data) {
-      this.userLoginData = data;
-
-      try {
-        const response = await fetch(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.userLoginData),
-          }
-        );
-
-        const result = await response.json();
-        console.log("Ответ от сервера:", result);
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error("Ошибка при отправке:", error);
-        } else {
-          console.log("Какаято другая ошибка:", error);
-        }
-      }
-    }
+    sendLoginData(data);
   }
 
   setLoginPassword(password: string) {
@@ -133,14 +75,14 @@ class UserStore {
     localStorage.setItem("sign-up-first-name", firstName);
   }
 
-  setSignUpLastName(lastName: string) {
-    this.signUpLastName = lastName;
-    localStorage.setItem("sign-up-last-name", lastName);
+  setSignUpsecondName(secondName: string) {
+    this.signUpsecondName = secondName;
+    localStorage.setItem("sign-up-last-name", secondName);
   }
 
-  setSignUpSchoolName(schoolName: string) {
-    this.signUpSchoolName = schoolName;
-    localStorage.setItem("sign-up-school-name", schoolName);
+  setSignUpautoSchoolName(autoSchoolName: string) {
+    this.signUpautoSchoolName = autoSchoolName;
+    localStorage.setItem("sign-up-school-name", autoSchoolName);
   }
 
   setSignUpEmail(email: string) {
